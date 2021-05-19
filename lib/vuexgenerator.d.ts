@@ -1,0 +1,29 @@
+import type { IServiceConfig, IModules } from './types';
+/**
+ * plugin
+ * @param serviceConfig - service的配置
+ * @param modules - 模块的配置
+ * @return Function
+ */
+declare const plugin: (serviceConfig: IServiceConfig, modules: IModules) => (store: any) => void;
+/**
+ * mapState
+ * @param namespaces
+ * @return object
+ */
+export declare const mapState: (namespaces: string[]) => {
+    loading: () => any;
+};
+/**
+ * mapActions
+ * @param namespaces
+ * @return object
+ */
+export declare const mapActions: (namespaces: string[]) => {};
+/**
+ * mapMutations
+ * @param namespaces
+ * @return object
+ */
+export declare const mapMutations: (namespaces: string[]) => {};
+export default plugin;

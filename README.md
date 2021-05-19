@@ -1,2 +1,4 @@
 # CTSJ-VuexGenerator
 Vuex的生成器
+
+根据Service自动生成vuex中的module同时注入computed和methods

@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sources":["index.js"],"sourcesContent":["import VuexGenerator, { mapMutations, mapState, mapActions } from './vuexgenerator';\r\nexport { mapState, mapMutations, mapActions };\r\nexport default VuexGenerator;\r\n"],"names":["VuexGenerator","mapMutations","mapState","mapActions"],"mappings":"OAAOA,eAAiBC,aAAcC,SAAUC,gDAEjCH,qBADNE,SAAUD,aAAcE"}
