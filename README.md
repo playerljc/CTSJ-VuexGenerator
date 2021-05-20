@@ -6,7 +6,7 @@ vuex 生成器，能通过 Service 自动映射成组件引用 vuex 的 State、
 
 &ensp;&ensp;一个简单的例子，用 vuex 编写一个标椎用户的模块，用户模块中是标准的 CRUD 操作，我们大致会这样去写
 
-######1. 定义 UserService，UserService 大致会是这样 `
+1. 定义 UserService，UserService 大致会是这样 `
 
 ```javascript
 import { stringify } from 'qs';
@@ -38,7 +38,7 @@ export async function fetchtUpdate(payload) {
 }
 ```
 
-######2. 定义 UserModel，UserModel 大致会是这样 `
+2. 定义 UserModel，UserModel 大致会是这样 `
 
 ```javascript
 import {
@@ -124,7 +124,7 @@ export default {
 };
 ```
 
-######3. 定义 UserPage, UserPage 大致会是这样 `
+3. 定义 UserPage, UserPage 大致会是这样 `
 ```javascript
 <template>...</template>
 <script>
@@ -161,7 +161,7 @@ export default {
 
 # 例子
 
-######1. 定义 UserService
+1. 定义 UserService
 
 ```javascript
 import { stringify } from 'qs';
@@ -205,13 +205,13 @@ export default {
 };
 ```
 
-######2. 定义 UserModel
+2. 定义 UserModel
 
 ```javascript
 export default {};
 ```
 
-######3. 定义 UserPage `
+3. 定义 UserPage `
 
 ```javascript
 <template>
@@ -284,7 +284,7 @@ export default {};
 </script>
 ```
 
-######4. 注册 Service(在一个单独的文件中 VuexGeneratorPlugin.js) `
+4. 注册 Service(在一个单独的文件中 VuexGeneratorPlugin.js) `
 
 ```javascript
 import VuexGenerator from '@ctsj/vuexgenerator';
@@ -311,7 +311,7 @@ export default VuexGenerator(serviceRegister(), {
 });
 ```
 
-######5. 在 main.js 中进行引用插件 
+5. 在 main.js 中进行引用插件 
 
 ```javascript
 import Vue from 'vue';
