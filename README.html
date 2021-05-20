@@ -1,44 +1,51 @@
-# CTSJ-VuexGenerator
+<h1>CTSJ-VuexGenerator</h1>
+<p>
+	vuex生成器，能通过Service自动映射成组件引用vuex的State、Action和Mutation并带有自动重置功能(此功能是一个vuex的插件)
+</p>
 
-vuex生成器，能通过Service自动映射成组件引用vuex的State、Action和Mutation并带有自动重置功能(此功能是一个vuex的插件)
+<h1>简介</h1>
+<div>
+	<p>一个简单的例子，用vuex编写一个标椎用户的模块，用户模块中是标准的CRUD操作，我们大致会这样去写</p>
 
-# 简介
-
-一个简单的例子，用vuex编写一个标椎用户的模块，用户模块中是标准的CRUD操作，我们大致会这样去写
-
-1. 定义UserService，UserService大致会是这样 `
+	<ol>
+		<li>
+			<p>定义UserService，UserService大致会是这样</p>
+			<code>
 <pre>
 import { stringify } from 'qs';
 import request from '@/utils/request';
 
-// &#x5217;&#x8868;
+// 列表
 export async function fetchtList(params) {
   return request.get('fetchList');
 }
 
-// &#x8BE6;&#x60C5;
+// 详情
 export async function fetchtInfo(id) {
   return request.get('fetchtInfo');
 }
 
-// &#x6DFB;&#x52A0;
+// 添加
 export async function fetchtSave(payload) {
   return request.post('fetchSave');
 }
 
-// &#x5220;&#x9664;
+// 删除
 export async function fetchtDelete(id) {
   return request.delete('fetchtDelete');
 }
 
-// &#x4FEE;&#x6539;
+// 修改
 export async function fetchtUpdate(payload) {
   return request.put('fetchtUpdate');
 }
 </pre>
-			`
+			</code>
+		</li>
 
-2. 定义UserModel，UserModel大致会是这样 `
+		<li>
+			<p>定义UserModel，UserModel大致会是这样</p>
+			<code>
 <pre>
   import {
     fetchtList,
@@ -58,7 +65,7 @@ export async function fetchtUpdate(payload) {
 			info: {},
     },
     actions: {
-      // &#x5217;&#x8868;
+      // 列表
       fetchList({commit, state}, payload) {
         fetchtList(payload).then(response => {
 					if (response.code === 0) {
@@ -69,7 +76,7 @@ export async function fetchtUpdate(payload) {
 					}
 				});
       },
-      // &#x8BE6;&#x60C5;
+      // 详情
       fetchInfo({commit, state}, { id }) {
         fetchInfo(id).then(response => {
 					if (response.code === 0) {
@@ -80,7 +87,7 @@ export async function fetchtUpdate(payload) {
 					}
 				});
       },
-      // &#x6DFB;&#x52A0;
+      // 添加
       feachSave({commit, state}, { success, ...other }) {
         feachSave(other).then(response => {
 					if (response.code === 0) {
@@ -90,7 +97,7 @@ export async function fetchtUpdate(payload) {
 					}
 				});
       },
-      // &#x4FEE;&#x6539;
+      // 修改
       feachUpdate({commit,state},{ success, ...other }) {
         feachUpdate(other).then(response => {
 					if (response.code === 0) {
@@ -100,7 +107,7 @@ export async function fetchtUpdate(payload) {
 					}
 				});
       },
-      // &#x5220;&#x9664;
+      // 删除
       feachDelete({commit,state},{ success, id }) {
         feachDelete(id).then(response => {
 					if (response.code === 0) {
@@ -122,8 +129,11 @@ export async function fetchtUpdate(payload) {
     },
   };
 </pre>
-			`
-3. 定义UserPage, UserPage大致会是这样 `
+			</code>
+		</li>
+		<li>
+			<p>定义UserPage, UserPage大致会是这样</p>
+			<code>
 <pre>
 	<template>...</template>
 	<script>
@@ -149,88 +159,108 @@ export async function fetchtUpdate(payload) {
 		};
   </script>
 </pre>
-			`
+			</code>
+		</li>
+	</ol>
 
-我们会发现一个问题，像这样比较常规的CRUD操作，从Service -> Model -> Component的computed和methods方法的名字都是一一对应的， 而Model中的actions操作基本都是调用Service中相应的接口，并且注入到数据流当中，而且Service也是按照相应模块编写的比如UserService就是处理User相关的操作， 这样就和Model中的namespace相对应，再则Model中的Mutations里面应该只有一个receive的Mutation， 不应该有多个处理，actions中所有的commit(mutation)都应该调用commit('receive')来进行处理 所以我们就可以根据Service自动生成computed和methods和Model中的actions和mutations， 我们只处理标椎模块，如果自动生成的这三部分不能满足需求，可以进行重写覆盖
+	<p>
+		我们会发现一个问题，像这样比较常规的CRUD操作，从Service -> Model -> Component的computed和methods方法的名字都是一一对应的，
+		而Model中的actions操作基本都是调用Service中相应的接口，并且注入到数据流当中，而且Service也是按照相应模块编写的比如UserService就是处理User相关的操作，
+		这样就和Model中的namespace相对应，再则Model中的Mutations里面应该只有一个receive的Mutation，
+		不应该有多个处理，actions中所有的commit(mutation)都应该调用commit('receive')来进行处理 所以我们就可以根据Service自动生成computed和methods和Model中的actions和mutations，
+		我们只处理标椎模块，如果自动生成的这三部分不能满足需求，可以进行重写覆盖
+	</p>
+</div>
 
-# 安装
-
-`
+<h1>安装</h1>
+<code>
 <pre>
   npm install @ctsj/vuexgenerator
 </pre>
-`
+</code>
 
-# 例子
-
-1. 定义UserService `
+<h1>例子</h1>
+<ol>
+	<li>
+		<p>定义UserService</p>
+		<code>
 <pre>
   import { stringify } from 'qs';
   import request from '@/utils/request';
 
-  // &#x5217;&#x8868;
+  // 列表
   export async function fetchtList(params) {
     return request.get('fetchList');
   }
 
-  // &#x8BE6;&#x60C5;
+  // 详情
   export async function fetchtInfo(id) {
     return request.get('fetchtInfo');
   }
 
-  // &#x6DFB;&#x52A0;
+  // 添加
   export async function fetchtSave(payload) {
     return request.post('fetchSave');
   }
 
-  // &#x5220;&#x9664;
+  // 删除
   export async function fetchtDelete(id) {
     return request.delete('fetchtDelete');
   }
 
-  // &#x4FEE;&#x6539;
+  // 修改
   export async function fetchtUpdate(payload) {
     return request.put('fetchtUpdate');
   }
 
-  // &#x9ED8;&#x8BA4;&#x5BFC;&#x51FA;&#x4E0E;&#x63A5;&#x53E3;&#x5148;&#x5173;&#x7684;&#x53C2;&#x6570;
+  // 默认导出与接口先关的参数
   export default {
-    // &#x63A5;&#x53E3;&#x6210;&#x529F;&#x5931;&#x8D25;&#x7684;&#x72B6;&#x6001;&#x952E;
+    // 接口成功失败的状态键
     codeKey: 'code',
-    // &#x63A5;&#x53E3;&#x6210;&#x529F;&#x7684;&#x72B6;&#x6001;&#x503C;
+    // 接口成功的状态值
     codeSuccessKey: 200,
-    // &#x63A5;&#x53E3;&#x6570;&#x636E;&#x7684;&#x952E;
+    // 接口数据的键
     dataKey: 'data',
-    // &#x63A5;&#x53E3;&#x6D88;&#x606F;&#x952E;
+    // 接口消息键
     messageKey: 'message',
   };
 </pre>
-		`
+		</code>
+	</li>
 
-2. 定义UserModel `
+	<li>
+		<p>定义UserModel</p>
+		<code>
 <pre>
   export default {};
 </pre>
-		`
+		</code>
+	</li>
 
-3. 定义UserPage `
+	<li>
+		<p>定义UserPage</p>
+		<code>
 <pre>
   <template>
   <a-table :columns="columns" :data-source="userFetchList.list" :loading="loading['user/fetchList']" :pagination="false">
     <a slot="name" slot-scope="text">{{ text }}</a>
-    <span slot="customTitle"><a-icon type="smile-o"> Name</a-icon></span>
+    <span slot="customTitle"><a-icon type="smile-o" /> Name</span>
     <span slot="tags" slot-scope="tags">
-      <a-tag v-for="tag in tags" :key="tag" :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'">
+      <a-tag
+							v-for="tag in tags"
+							:key="tag"
+							:color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'"
+			>
         {{ tag.toUpperCase() }}
       </a-tag>
     </span>
     <span slot="action" slot-scope="text, record">
-      <a>Invite &#x4E00; {{ record.name }}</a>
-      <a-divider type="vertical">
+      <a>Invite 一 {{ record.name }}</a>
+      <a-divider type="vertical" />
       <a>Delete</a>
-      <a-divider type="vertical">
-      <a class="ant-dropdown-link"> More actions <a-icon type="down"> </a-icon></a>
-    </a-divider></a-divider></span>
+      <a-divider type="vertical" />
+      <a class="ant-dropdown-link"> More actions <a-icon type="down" /> </a>
+    </span>
   </a-table>
 	</template>
 	<script>
@@ -283,9 +313,12 @@ export async function fetchtUpdate(payload) {
 	};
 	</script>
 </pre>
-		`
+		</code>
+	</li>
 
-4. 注册Service(在一个单独的文件中VuexGeneratorPlugin.js) `
+	<li>
+		<p>注册Service(在一个单独的文件中VuexGeneratorPlugin.js)</p>
+		<code>
 <pre>
 	import VuexGenerator from '@ctsj/vuexgenerator';
 
@@ -304,15 +337,18 @@ export async function fetchtUpdate(payload) {
 		return services;
 	}
 
-	// &#x521B;&#x5EFA;VuexGeneratorPlugin&#x63D2;&#x4EF6;
+	// 创建VuexGeneratorPlugin插件
 	export default VuexGenerator(serviceRegister(), {
 		user: UserModel,
 		person: PersonModel,
 	});
 </pre>
-		`
+		</code>
+	</li>
 
-5. 在main.js中进行引用插件 `
+	<li>
+		<p>在main.js中进行引用插件</p>
+		<code>
 <pre>
 	import Vue from 'vue';
 	import Vuex from 'vuex';
@@ -329,7 +365,7 @@ export async function fetchtUpdate(payload) {
 	Vue.use(Vuex);
 
 	const store = new Vuex.Store({
-		// &#x4F7F;&#x7528;VuexGeneratorPlugin&#x63D2;&#x4EF6;
+		// 使用VuexGeneratorPlugin插件
 		plugins: [VuexGeneratorPlugin],
 	});
 
@@ -339,17 +375,41 @@ export async function fetchtUpdate(payload) {
 		render: (h) => h(App),
 	}).$mount('#app');
 </pre>
-		`
+		</code>
+	</li>
+</ol>
 
-# API
+<h1>API</h1>
+<ul>
+	<li>
+		<div>
+			工厂方法 - 创建vuex的插件(传入ServiceConfig和Modules的定义)
+		</div>
+	</li>
 
-* 工厂方法 - 创建vuex的插件(传入ServiceConfig和Modules的定义)
+	<li>
+		<div>
+			mapState - state的辅助函数
+		</div>
+	</li>
+	<li>
+		<div>
+			mapActions - action的辅助函数
+		</div>
+	</li>
+	<li>
+		<div>
+			mapMutations - Mutations的辅助函数
+		</div>
+	</li>
+	<li>
+		<div>
+			cleanMixin - 用户自动重置vuex数据的mixin
+		</div>
+	</li>
+</ul>
 
-* mapState - state的辅助函数
-* mapActions - action的辅助函数
-* mapMutations - Mutations的辅助函数
-* cleanMixin - 用户自动重置vuex数据的mixin
-
-# 其他
-
-demo目录下附带了一个demo
+<h1>其他</h1>
+<p>
+	demo目录下附带了一个demo
+</p>
