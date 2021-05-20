@@ -70,7 +70,7 @@ function createActions({ namespace, service, serviceKeys }): object {
 /**
  * registerLoading
  */
-function registerLoading() {
+function registerLoading(): void {
   // state
   // eslint-disable-next-line no-underscore-dangle
   const _state = {
@@ -137,7 +137,7 @@ function registerLoading() {
 /**
  * registerBusinessModules
  */
-function registerBusinessModules() {
+function registerBusinessModules(): void {
   // 获取所有模块的命名空间
   const namespaces = Object.keys($modules);
 
@@ -307,6 +307,37 @@ export const mapMutations = (namespaces: string[]) => {
   }
 
   return mappingMutations(mutations);
+};
+
+/**
+ * cleanMixin - 在组件销毁之前重置所用的namespace的数据流为初始化数据
+ * @param namespaces
+ * @return function
+ */
+export const cleanMixin = (namespaces: string[]) => {
+  return {
+    /**
+     * beforeDestroy - 重置namespaces数据流的数据
+     */
+    beforeDestroy(): void {
+      namespaces.forEach((namespace: string) => {
+        const Service = $serviceConfig[namespace];
+
+        const serviceKeys = Object.keys(Service);
+
+        const defaultState = {};
+
+        serviceKeys.forEach((key) => {
+          if (key !== 'default') {
+            defaultState[key] = Service[key].defaultResult();
+          }
+        });
+
+        // @ts-ignore
+        this.$store.commit(`${namespace}/receive`, defaultState);
+      });
+    },
+  };
 };
 
 export default plugin;

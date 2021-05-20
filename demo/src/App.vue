@@ -17,11 +17,12 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from '@ctsj/vuexgenerator';
+import { mapState, mapMutations, mapActions, cleanMixin } from '@ctsj/vuexgenerator';
 
 import HelloWorld from './components/HelloWorld.vue';
 
 export default {
+  mixins: [cleanMixin(['user','person'])],
   data: () => ({
     a: '123',
   }),

@@ -26,4 +26,15 @@ export declare const mapActions: (namespaces: string[]) => {};
  * @return object
  */
 export declare const mapMutations: (namespaces: string[]) => {};
+/**
+ * cleanMixin - 在组件销毁之前重置所用的namespace的数据流为初始化数据
+ * @param namespaces
+ * @return function
+ */
+export declare const cleanMixin: (namespaces: string[]) => {
+    /**
+     * beforeDestroy - 重置namespaces数据流的数据
+     */
+    beforeDestroy(): void;
+};
 export default plugin;
