@@ -1,3 +1,5 @@
+import faker from 'faker';
+
 export const fetchList = (() => {
   return {
     call: () => {
@@ -12,7 +14,11 @@ export const fetchList = (() => {
             data: {
               total: 100,
               list: list.map((t, index) => ({
-                title: `user ${index + 1}`,
+                key: `${index + 1}`,
+                name: faker.name.findName(),
+                age: faker.random.number(),
+                address: faker.address.streetAddress(),
+                tags: [faker.name.findName(), faker.name.findName()],
               })),
             },
             message: '',
