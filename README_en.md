@@ -128,25 +128,25 @@ export default {
 ```javascript
 <template>...</template>
 <script>
-export default {
+  export default {
   computed: {
-    ...mapState({
-        list: state => state.user.list.list,
-        info: state => state.user.info,
-    }),
-  },
+  ...mapState({
+  list: state => state.user.list.list,
+  info: state => state.user.info,
+}),
+},
   methods: {
-    ...mapActions({
-      fetchList: 'user/fetchList',
-      fetchInfo: 'user/fetchInfo',
-      feachSave: 'user/feachSave',
-      feachUpdate: 'user/feachUpdate',
-      feachDelete: 'user/feachDelete',
-    }),
-    ...mapMutations({
-      receive:'user/receive'
-    }),
-  }
+  ...mapActions({
+  fetchList: 'user/fetchList',
+  fetchInfo: 'user/fetchInfo',
+  feachSave: 'user/feachSave',
+  feachUpdate: 'user/feachUpdate',
+  feachDelete: 'user/feachDelete',
+}),
+  ...mapMutations({
+  receive:'user/receive'
+}),
+}
 };
 </script>
 ```
@@ -219,67 +219,67 @@ export default {};
     <a slot="name" slot-scope="text">{{ text }}</a>
     <span slot="customTitle"><a-icon type="smile-o"> Name</a-icon></span>
     <span slot="tags" slot-scope="tags">
-      <a-tag v-for="tag in tags" :key="tag" :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'">
-        {{ tag.toUpperCase() }}
-      </a-tag>
+     <a-tag v-for="tag in tags" :key="tag" :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'">
+      {{ tag.toUpperCase() }}
+     </a-tag>
     </span>
     <span slot="action" slot-scope="text, record">
-      <a>Invite &#x4E00; {{ record.name }}</a>
-      <a-divider type="vertical">
-      <a>Delete</a>
-      <a-divider type="vertical">
+  <a>Invite &#x4E00; {{ record.name }}</a>
+  <a-divider type="vertical">
+    <a>Delete</a>
+    <a-divider type="vertical">
       <a class="ant-dropdown-link"> More actions <a-icon type="down"> </a-icon></a>
     </a-divider></a-divider></span>
-  </a-table>
+</a-table>
 </template>
 
 <script>
   import { mapState, mapMutations, mapActions, cleanMixin } from '@ctsj/vuexgenerator';
   export default {
-    data() {
-      return {
-        columns: [
-            {
-              dataIndex: 'name',
-              key: 'name',
-              slots: { title: 'customTitle' },
-              scopedSlots: { customRender: 'name' },
-            },
-            {
-              title: 'Age',
-              dataIndex: 'age',
-              key: 'age',
-            },
-            {
-              title: 'Address',
-              dataIndex: 'address',
-              key: 'address',
-            },
-            {
-              title: 'Tags',
-              key: 'tags',
-              dataIndex: 'tags',
-              scopedSlots: { customRender: 'tags' },
-            },
-            {
-              title: 'Action',
-              key: 'action',
-              scopedSlots: { customRender: 'action' },
-            },
-        ]
-      }
-    },
-    mounted() {
-      this.userFetchListAction();
-    },
-    mixins: [cleanMixin(['user'])],
-    computed: {
-      ...mapState(['user']),
-    },
-    methods: {
-      ...mapActions(['user']),
-      ...mapMutations(['user']),
-    },
+  data() {
+  return {
+  columns: [
+{
+  dataIndex: 'name',
+  key: 'name',
+  slots: { title: 'customTitle' },
+  scopedSlots: { customRender: 'name' },
+},
+{
+  title: 'Age',
+  dataIndex: 'age',
+  key: 'age',
+},
+{
+  title: 'Address',
+  dataIndex: 'address',
+  key: 'address',
+},
+{
+  title: 'Tags',
+  key: 'tags',
+  dataIndex: 'tags',
+  scopedSlots: { customRender: 'tags' },
+},
+{
+  title: 'Action',
+  key: 'action',
+  scopedSlots: { customRender: 'action' },
+},
+  ]
+}
+},
+  mounted() {
+  this.userFetchListAction();
+},
+  mixins: [cleanMixin(['user'])],
+  computed: {
+  ...mapState(['user']),
+},
+  methods: {
+  ...mapActions(['user']),
+  ...mapMutations(['user']),
+},
 };
 </script>
 ```
