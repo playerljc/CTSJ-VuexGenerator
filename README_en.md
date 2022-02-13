@@ -156,7 +156,8 @@ export default {
 # 安装
 
 ```javascript
-  npm install @ctsj/vuexgenerator
+  npm install @ctsj/vuexgenerator@next
+  yarn add @ctsj/vuexgenerator@next
 ```
 
 # 例子
@@ -314,30 +315,18 @@ export default VuexGenerator(serviceRegister(), {
 5. 在 main.js 中进行引用插件
 
 ```javascript
-import Vue from 'vue';
-import Vuex from 'vuex';
-import Antd from 'ant-design-vue';
+import { createApp } from 'vue'
+import Antd from 'ant-design-vue'
 
-import VuexGeneratorPlugin from './store/plugin/VuexGeneratorPlugin';
-import router from './router';
-import App from './App.vue';
+import store from './store'
+import router from './router'
+import App from './App.vue'
 
-import 'ant-design-vue/dist/antd.css';
+import './registerServiceWorker'
 
-Vue.config.productionTip = false;
-Vue.use(Antd);
-Vue.use(Vuex);
+import 'ant-design-vue/dist/antd.css'
 
-const store = new Vuex.Store({
-  // &#x4F7F;&#x7528;VuexGeneratorPlugin&#x63D2;&#x4EF6;
-  plugins: [VuexGeneratorPlugin],
-});
-
-new Vue({
-  store,
-  router,
-  render: (h) => h(App),
-}).$mount('#app');
+createApp(App).use(store).use(router).use(Antd).mount('#app')
 ```
 
 # API
