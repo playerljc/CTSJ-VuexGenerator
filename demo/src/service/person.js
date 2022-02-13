@@ -1,12 +1,12 @@
-import faker from 'faker';
+import faker from 'faker'
 
 export const fetchList = (() => {
   return {
     call: () => {
       return new Promise((resolve) => {
-        const list = [];
-        list.length = 100;
-        list.fill(0);
+        const list = []
+        list.length = 100
+        list.fill(0)
 
         setTimeout(() => {
           resolve({
@@ -18,24 +18,24 @@ export const fetchList = (() => {
                 name: faker.name.findName(),
                 age: faker.random.number(),
                 address: faker.address.streetAddress(),
-                tags: [faker.name.findName(), faker.name.findName()],
-              })),
+                tags: [faker.name.findName(), faker.name.findName()]
+              }))
             },
-            message: '',
-          });
-        }, 3000);
-      });
+            message: ''
+          })
+        }, 3000)
+      })
     },
     defaultResult: () => ({
       total: 0,
-      list: [],
-    }),
-  };
-})();
+      list: []
+    })
+  }
+})()
 
 export default {
   codeKey: 'code',
   codeSuccessKey: 200,
   dataKey: 'data',
-  messageKey: 'message',
-};
+  messageKey: 'message'
+}

@@ -1,11 +1,9 @@
+const path = require('path')
+
 module.exports = {
-  // configureWebpack: {
-  //   output: {
-  //     libraryExport: 'default',
-  //   },
-  //   externals: {
-  //     vue: 'Vue',
-  //     CtsjMicroFrontends: 'CtsjMicroFrontends',
-  //   },
-  // },
-};
+  configureWebpack: {
+    resolve: {
+      modules: [path.join(__dirname, 'node_modules'), 'node_modules']
+    }
+  }
+}

@@ -211,8 +211,12 @@ function formatKey(key: string): string {
  * @return Function
  */
 const plugin = (serviceConfig: IServiceConfig, modules: IModules) => {
+  console.log('~~~~~~~~~~~~~~~~~~~~~~~~plugin的构造函数');
   $serviceConfig = serviceConfig;
   $modules = modules;
+
+  console.log('~~~~~~~~~~~~~~~~~~~~~~~~plugin的构造函数1',$serviceConfig);
+  console.log('~~~~~~~~~~~~~~~~~~~~~~~~plugin的构造函数2',$modules);
 
   /**
    * vuex的一个VuexGenerator插件
@@ -238,6 +242,8 @@ const plugin = (serviceConfig: IServiceConfig, modules: IModules) => {
  * @return object
  */
 export const mapState = (namespaces: string[]) => {
+  console.log('mapState', namespaces);
+
   const states = {
     loading: (state) => state.loading,
   };
