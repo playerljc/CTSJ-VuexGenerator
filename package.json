@@ -67,7 +67,8 @@
     "husky": "^7.0.4",
     "lint-staged": "^12.3.3",
     "prettier": "^2.5.1",
-    "stylelint": "^14.5.0"
+    "stylelint": "^14.5.0",
+    "vue": "^3.2.31"
   },
   "dependencies": {
     "vuex": "^4.0.2"
