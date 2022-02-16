@@ -285,7 +285,68 @@ export default {};
 </script>
 ```
 
-4. 注册 Service(在一个单独的文件中 VuexGeneratorPlugin.js)
+4. 使用setup
+```javascript
+<template>
+    <a-table
+      :columns="columns"
+      :data-source="userFetchList.list"
+      :loading="loading['user/fetchList']"
+      :pagination="false"
+    />
+</template>
+
+<script lang="js">
+import { useState, useActions, cleanMixin } from '@ctsj/vuexgenerator'
+import { onMounted } from 'vue'
+
+export default {
+  mixins: [cleanMixin(['user'])],
+  setup () {
+    const state = useState(['user'])
+
+    const actions = useActions(['user'])
+
+    onMounted(() => {
+      actions.userFetchListAction().then((res) => {
+        console.log('userFetchListAction success', res, state)
+      }) 
+    })
+    
+    return {
+      columns: [
+        {
+          dataIndex: 'name',
+          key: 'name'
+        },
+        {
+          title: 'Age',
+          dataIndex: 'age',
+          key: 'age'
+        },
+        {
+          title: 'Address',
+          dataIndex: 'address',
+          key: 'address'
+        },
+        {
+          title: 'Tags',
+          key: 'tags',
+          dataIndex: 'tags'
+        },
+        {
+          title: 'Action',
+          key: 'action'
+        }
+      ],
+      ...state
+    }
+  }
+}
+</script>
+```
+   
+5. 注册 Service(在一个单独的文件中 VuexGeneratorPlugin.js)
 
 ```javascript
 import VuexGenerator from '@ctsj/vuexgenerator';
@@ -312,7 +373,7 @@ export default VuexGenerator(serviceRegister(), {
 });
 ```
 
-5. 在 main.js 中进行引用插件 
+6. 在 main.js 中进行引用插件 
 
 ```javascript
 import { createApp } from 'vue'
@@ -336,6 +397,9 @@ createApp(App).use(store).use(router).use(Antd).mount('#app')
 - mapState - state 的辅助函数
 - mapActions - action 的辅助函数
 - mapMutations - Mutations 的辅助函数
+- useState - 在setup中获取数据的辅助函数
+- useMutations - 在setup中更新state的辅助函数
+- useActions - 在setup中进行异步更新state的辅助函数  
 - cleanMixin - 用户自动重置 vuex 数据的 mixin
 
 # 其他
