@@ -1,12 +1,5 @@
 import type { IServiceConfig, IModules } from './types';
 /**
- * plugin
- * @param serviceConfig - service的配置
- * @param modules - 模块的配置
- * @return Function
- */
-declare const plugin: (serviceConfig: IServiceConfig, modules: IModules) => (store: any) => void;
-/**
  * mapState
  * @param namespaces
  * @return object
@@ -33,8 +26,35 @@ export declare const mapMutations: (namespaces: string[]) => {};
  */
 export declare const cleanMixin: (namespaces: string[]) => {
     /**
-     * beforeDestroy - 重置namespaces数据流的数据
+     * beforeMount - 重置namespaces数据流的数据
      */
-    beforeDestroy(): void;
+    beforeMount(): void;
 };
-export default plugin;
+/**
+ * useState
+ * @description 支持setup的useState
+ * @param namespaces
+ */
+export declare const useState: (namespaces: string[]) => {
+    loading: import("@vue/reactivity").ComputedRef<any>;
+};
+/**
+ * useMutations
+ * @description 支持setup的useMutations
+ * @param namespaces
+ */
+export declare const useMutations: (namespaces: string[]) => {};
+/**
+ * useActions
+ * @description 支持setup的useActions
+ * @param namespaces
+ */
+export declare const useActions: (namespaces: string[]) => {};
+declare const _default: (serviceConfig: IServiceConfig, modules: IModules) => (store: any) => void;
+/**
+ * plugin
+ * @param serviceConfig - service的配置
+ * @param modules - 模块的配置
+ * @return Function
+ */
+export default _default;

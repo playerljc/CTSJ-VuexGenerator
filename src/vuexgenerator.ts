@@ -5,6 +5,8 @@ import {
   mapMutations as mappingMutations,
 } from 'vuex';
 
+import { computed, toRef } from 'vue';
+
 import type { IServiceConfig, IModules } from './types';
 
 // @ts-ignore
@@ -18,34 +20,33 @@ let $modules: IModules;
  * @param service
  * @param serviceKeys
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function createActions({ namespace, service, serviceKeys }): object {
   const actions = {};
 
   for (let i = 0; i < serviceKeys.length; i++) {
     const key = serviceKeys[i];
 
-    // eslint-disable-next-line no-continue
     if (key === 'default') continue;
 
     /**
      * action
      * @param context
-     * @param params
+     * @param payload
      */
-    actions[key] = ({ commit, state }, params) => {
+    actions[key] = ({ commit, state }, payload) => {
       return new Promise((resolve, reject) => {
         // 设置loading为true
         commit('loading/receive', { key: `${namespace}/${key}`, value: true }, { root: true });
 
         service[key]
-          .call(params)
+          .call(payload)
           .then((response) => {
             const { codeKey, codeSuccessKey, dataKey } = service.default;
 
             if (response[codeKey] === codeSuccessKey) {
               // 向数据流里放入Service的方法名为key,response[dataKey]为值的数据
-              commit('receive', { ...state, [key]: response[dataKey] });
+              // commit('receive', { ...state, [key]: response[dataKey] });
+              commit(`${namespace}/receive`, { key, value: response[dataKey] }, { root: true });
 
               // 更新loading为false
               commit(
@@ -72,7 +73,6 @@ function createActions({ namespace, service, serviceKeys }): object {
  */
 function registerLoading(): void {
   // state
-  // eslint-disable-next-line no-underscore-dangle
   const _state = {
     global: false,
   };
@@ -104,7 +104,6 @@ function registerLoading(): void {
     state: _state,
     mutations: {
       receive(state, { key, value }) {
-        // eslint-disable-next-line no-param-reassign
         state[key] = value;
 
         const { global, ...others } = state;
@@ -122,7 +121,6 @@ function registerLoading(): void {
           }
         }
 
-        // eslint-disable-next-line no-param-reassign
         state.global = globalLoading;
 
         // console.log('key', key);
@@ -157,7 +155,9 @@ function registerBusinessModules(): void {
 
     serviceKeys.forEach((key) => {
       if (key !== 'default') {
-        defaultState[key] = Service[key].defaultResult();
+        defaultState[key] = {
+          value: Service[key].defaultResult(),
+        };
       }
     });
 
@@ -165,17 +165,16 @@ function registerBusinessModules(): void {
     $store.registerModule(namespace, {
       // 开启命名空间
       namespaced: true,
-      // @ts-ignore
-      state: () => ({ ...defaultState, ...((module || {}).state || {}) }),
+      state: () => ({
+        ...defaultState,
+        // @ts-ignore
+        ...((module || {})?.state || {}),
+      }),
       mutations: {
-        receive(state, payload) {
-          const keys = Object.keys(state);
-          // eslint-disable-next-line @typescript-eslint/no-shadow
-          for (let i = 0; i < keys.length; i++) {
-            const key = keys[i];
-            // eslint-disable-next-line no-param-reassign
-            state[key] = payload[key];
-          }
+        receive(state, { key, value }) {
+          if (!key) return;
+
+          state[key].value = value;
         },
         // @ts-ignore
         ...((module || {}).mutations || {}),
@@ -205,45 +204,11 @@ function formatKey(key: string): string {
 }
 
 /**
- * plugin
- * @param serviceConfig - service的配置
- * @param modules - 模块的配置
- * @return Function
- */
-const plugin = (serviceConfig: IServiceConfig, modules: IModules) => {
-  console.log('~~~~~~~~~~~~~~~~~~~~~~~~plugin的构造函数');
-  $serviceConfig = serviceConfig;
-  $modules = modules;
-
-  console.log('~~~~~~~~~~~~~~~~~~~~~~~~plugin的构造函数1',$serviceConfig);
-  console.log('~~~~~~~~~~~~~~~~~~~~~~~~plugin的构造函数2',$modules);
-
-  /**
-   * vuex的一个VuexGenerator插件
-   * @param context
-   */
-  // @ts-ignore
-  return (store: Store) => {
-    // 获取vuex的store对象
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    $store = store;
-
-    // 创建loading的module
-    registerLoading();
-
-    // 根据serviceConfig配置自动生成module配置
-    registerBusinessModules();
-  };
-};
-
-/**
  * mapState
  * @param namespaces
  * @return object
  */
 export const mapState = (namespaces: string[]) => {
-  console.log('mapState', namespaces);
-
   const states = {
     loading: (state) => state.loading,
   };
@@ -259,10 +224,9 @@ export const mapState = (namespaces: string[]) => {
     for (let j = 0; j < serviceKeys.length; j++) {
       const key = serviceKeys[j];
 
-      // eslint-disable-next-line no-continue
       if (key === 'default') continue;
 
-      states[`${namespace}${formatKey(key)}`] = (state) => state[namespace][key];
+      states[`${namespace}${formatKey(key)}`] = (state) => state[namespace][key].value;
     }
   }
 
@@ -288,7 +252,6 @@ export const mapActions = (namespaces: string[]) => {
     for (let j = 0; j < serviceKeys.length; j++) {
       const key = serviceKeys[j];
 
-      // eslint-disable-next-line no-continue
       if (key === 'default') continue;
 
       actions[`${namespace}${formatKey(key)}Action`] = `${namespace}/${key}`;
@@ -323,9 +286,9 @@ export const mapMutations = (namespaces: string[]) => {
 export const cleanMixin = (namespaces: string[]) => {
   return {
     /**
-     * beforeDestroy - 重置namespaces数据流的数据
+     * beforeMount - 重置namespaces数据流的数据
      */
-    beforeDestroy(): void {
+    beforeMount(): void {
       namespaces.forEach((namespace: string) => {
         const Service = $serviceConfig[namespace];
 
@@ -346,4 +309,114 @@ export const cleanMixin = (namespaces: string[]) => {
   };
 };
 
-export default plugin;
+/**
+ * useState
+ * @description 支持setup的useState
+ * @param namespaces
+ */
+export const useState = (namespaces: string[]) => {
+  const store = $store;
+
+  const states = {
+    loading: computed(() => store.state.loading),
+  };
+
+  for (let i = 0; i < namespaces.length; i++) {
+    const namespace = namespaces[i];
+
+    // service的实例
+    const Service = $serviceConfig[namespace];
+
+    const serviceKeys = Object.keys(Service);
+
+    for (let j = 0; j < serviceKeys.length; j++) {
+      const key = serviceKeys[j];
+
+      if (key === 'default') continue;
+
+      const keyComputed = computed(() => store.state[namespace][key]);
+
+      states[`${namespace}${formatKey(key)}`] = toRef(keyComputed.value, 'value');
+    }
+  }
+
+  return states;
+};
+
+/**
+ * useMutations
+ * @description 支持setup的useMutations
+ * @param namespaces
+ */
+export const useMutations = (namespaces: string[]) => {
+  const store = $store;
+
+  const mutations = {};
+
+  for (let i = 0; i < namespaces.length; i++) {
+    const namespace = namespaces[i];
+
+    mutations[`${namespace}ReceiveMutation`] = (payload?: any) =>
+      store.commit(`${namespace}/receive`, payload);
+  }
+
+  return mutations;
+};
+
+/**
+ * useActions
+ * @description 支持setup的useActions
+ * @param namespaces
+ */
+export const useActions = (namespaces: string[]) => {
+  const store = $store;
+
+  const actions = {};
+
+  for (let i = 0; i < namespaces.length; i++) {
+    const namespace = namespaces[i];
+
+    // service的实例
+    const Service = $serviceConfig[namespace];
+
+    const serviceKeys = Object.keys(Service);
+
+    for (let j = 0; j < serviceKeys.length; j++) {
+      const key = serviceKeys[j];
+
+      if (key === 'default') continue;
+
+      actions[`${namespace}${formatKey(key)}Action`] = (payload?: any) =>
+        store.dispatch(`${namespace}/${key}`, payload);
+    }
+  }
+
+  return actions;
+};
+
+/**
+ * plugin
+ * @param serviceConfig - service的配置
+ * @param modules - 模块的配置
+ * @return Function
+ */
+export default (serviceConfig: IServiceConfig, modules: IModules) => {
+  $serviceConfig = serviceConfig;
+  $modules = modules;
+
+  /**
+   * vuex的一个VuexGenerator插件
+   * @param context
+   */
+  // @ts-ignore
+  return (store: Store) => {
+    // 获取vuex的store对象
+    $store = store;
+
+    // 创建loading的module
+    registerLoading();
+
+    // 根据serviceConfig配置自动生成module配置
+    registerBusinessModules();
+  };
+};

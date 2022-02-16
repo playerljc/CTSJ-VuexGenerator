@@ -15,8 +15,6 @@ function serviceRegister () {
   return services
 }
 
-console.log('VuexGenerator', VuexGenerator)
-
 // 创建VuexGeneratorPlugin插件
 export default VuexGenerator(serviceRegister(), {
   user: UserModel,

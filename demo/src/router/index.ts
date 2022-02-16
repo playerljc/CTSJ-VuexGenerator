@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 // import Home from '../views/Home.vue'
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import User from '../views/User'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import UserSetup from '../views/UserSetup'
 // @ts-ignore
 import Person from '../views/Person'
 
@@ -27,6 +27,10 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/user'
   },
   { path: '/user', component: User },
+  {
+    path: '/usersetup',
+    component: UserSetup
+  },
   { path: '/person', component: Person }
 ]
 

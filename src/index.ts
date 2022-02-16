@@ -1,5 +1,13 @@
-import VuexGenerator, { mapMutations, mapState, mapActions, cleanMixin } from './vuexgenerator';
+import VuexGenerator, {
+  mapMutations,
+  mapState,
+  mapActions,
+  useState,
+  useMutations,
+  useActions,
+  cleanMixin,
+} from './vuexgenerator';
 
-export { mapState, mapMutations, mapActions, cleanMixin };
+export { mapState, mapMutations, mapActions, useState, useMutations, useActions, cleanMixin };
 
 export default VuexGenerator;
