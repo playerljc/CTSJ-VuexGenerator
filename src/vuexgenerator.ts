@@ -334,9 +334,10 @@ export const useState = (namespaces: string[]) => {
 
       if (key === 'default') continue;
 
-      const keyComputed = computed(() => store.state[namespace][key]);
-
-      states[`${namespace}${formatKey(key)}`] = toRef(keyComputed.value, 'value');
+      // const keyComputed = computed(() => store.state[namespace][key]);
+      //
+      // states[`${namespace}${formatKey(key)}`] = toRef(keyComputed.value, 'value');
+      states[`${namespace}${formatKey(key)}`] = toRef(store.state[namespace][key], 'value');
     }
   }
 
