@@ -14,27 +14,27 @@ import request from '@/utils/request';
 
 // &#x5217;&#x8868;
 export async function fetchtList(params) {
-  return request.get('fetchList');
+    return request.get('fetchList');
 }
 
 // &#x8BE6;&#x60C5;
 export async function fetchtInfo(id) {
-  return request.get('fetchtInfo');
+    return request.get('fetchtInfo');
 }
 
 // &#x6DFB;&#x52A0;
 export async function fetchtSave(payload) {
-  return request.post('fetchSave');
+    return request.post('fetchSave');
 }
 
 // &#x5220;&#x9664;
 export async function fetchtDelete(id) {
-  return request.delete('fetchtDelete');
+    return request.delete('fetchtDelete');
 }
 
 // &#x4FEE;&#x6539;
 export async function fetchtUpdate(payload) {
-  return request.put('fetchtUpdate');
+    return request.put('fetchtUpdate');
 }
 ```
 
@@ -42,85 +42,85 @@ export async function fetchtUpdate(payload) {
 
 ```javascript
 import {
-  fetchtList,
-  fetchtInfo,
-  fetchtSave,
-  fetchtDelete,
-  fetchtUpdate,
+    fetchtList,
+    fetchtInfo,
+    fetchtSave,
+    fetchtDelete,
+    fetchtUpdate,
 } from '@/services/UserService';
 
 export default {
-  namespace: true,
-  state: {
-    list: {
-      list: [],
-      total: 0,
+    namespace: true,
+    state: {
+        list: {
+            list: [],
+            total: 0,
+        },
+        info: {},
     },
-    info: {},
-  },
-  actions: {
-    // &#x5217;&#x8868;
-    fetchList({ commit, state }, payload) {
-      fetchtList(payload).then((response) => {
-        if (response.code === 0) {
-          commit('receive', {
-            ...state,
-            list: response.data,
-          });
-        }
-      });
+    actions: {
+        // &#x5217;&#x8868;
+        fetchList({ commit, state }, payload) {
+            fetchtList(payload).then((response) => {
+                if (response.code === 0) {
+                    commit('receive', {
+                        ...state,
+                        list: response.data,
+                    });
+                }
+            });
+        },
+        // &#x8BE6;&#x60C5;
+        fetchInfo({ commit, state }, { id }) {
+            fetchInfo(id).then((response) => {
+                if (response.code === 0) {
+                    commit('receive', {
+                        ...state,
+                        info: response.data,
+                    });
+                }
+            });
+        },
+        // &#x6DFB;&#x52A0;
+        feachSave({ commit, state }, { success, ...other }) {
+            feachSave(other).then((response) => {
+                if (response.code === 0) {
+                    if (success) {
+                        success();
+                    }
+                }
+            });
+        },
+        // &#x4FEE;&#x6539;
+        feachUpdate({ commit, state }, { success, ...other }) {
+            feachUpdate(other).then((response) => {
+                if (response.code === 0) {
+                    if (success) {
+                        success();
+                    }
+                }
+            });
+        },
+        // &#x5220;&#x9664;
+        feachDelete({ commit, state }, { success, id }) {
+            feachDelete(id).then((response) => {
+                if (response.code === 0) {
+                    if (success) {
+                        success();
+                    }
+                }
+            });
+        },
     },
-    // &#x8BE6;&#x60C5;
-    fetchInfo({ commit, state }, { id }) {
-      fetchInfo(id).then((response) => {
-        if (response.code === 0) {
-          commit('receive', {
-            ...state,
-            info: response.data,
-          });
-        }
-      });
+    mutations: {
+        receive(state, payload) {
+            const keys = Object.keys(state);
+            for (let i = 0; i < keys.length; i++) {
+                const key = keys[i];
+                state[key] = payload[key];
+            }
+        },
     },
-    // &#x6DFB;&#x52A0;
-    feachSave({ commit, state }, { success, ...other }) {
-      feachSave(other).then((response) => {
-        if (response.code === 0) {
-          if (success) {
-            success();
-          }
-        }
-      });
-    },
-    // &#x4FEE;&#x6539;
-    feachUpdate({ commit, state }, { success, ...other }) {
-      feachUpdate(other).then((response) => {
-        if (response.code === 0) {
-          if (success) {
-            success();
-          }
-        }
-      });
-    },
-    // &#x5220;&#x9664;
-    feachDelete({ commit, state }, { success, id }) {
-      feachDelete(id).then((response) => {
-        if (response.code === 0) {
-          if (success) {
-            success();
-          }
-        }
-      });
-    },
-  },
-  mutations: {
-    receive(state, payload) {
-      const keys = Object.keys(state);
-      for (let i = 0; i < keys.length; i++) {
-        const key = keys[i];
-        state[key] = payload[key];
-      }
-    },
-  },
 };
 ```
 
@@ -128,25 +128,25 @@ export default {
 ```javascript
 <template>...</template>
 <script>
-export default {
-  computed: {
+    export default {
+    computed: {
     ...mapState({
-        list: state => state.user.list.list,
-        info: state => state.user.info,
-    }),
-  },
-  methods: {
+    list: state => state.user.list.list,
+    info: state => state.user.info,
+}),
+},
+    methods: {
     ...mapActions({
-      fetchList: 'user/fetchList',
-      fetchInfo: 'user/fetchInfo',
-      feachSave: 'user/feachSave',
-      feachUpdate: 'user/feachUpdate',
-      feachDelete: 'user/feachDelete',
-    }),
+    fetchList: 'user/fetchList',
+    fetchInfo: 'user/fetchInfo',
+    feachSave: 'user/feachSave',
+    feachUpdate: 'user/feachUpdate',
+    feachDelete: 'user/feachDelete',
+}),
     ...mapMutations({
-      receive:'user/receive'
-    }),
-  }
+    receive:'user/receive'
+}),
+}
 };
 </script>
 ```
@@ -156,8 +156,8 @@ export default {
 # 安装
 
 ```javascript
-  npm install @ctsj/vuexgenerator@next
-  yarn add @ctsj/vuexgenerator@next
+  npm install @ctsj/vuexgenerator
+  yarn add @ctsj/vuexgenerator
 ```
 
 # 例子
@@ -345,7 +345,7 @@ export default {
 }
 </script>
 ```
-   
+
 5. 注册 Service(在一个单独的文件中 VuexGeneratorPlugin.js)
 
 ```javascript
@@ -373,7 +373,7 @@ export default VuexGenerator(serviceRegister(), {
 });
 ```
 
-6. 在 main.js 中进行引用插件 
+6. 在 main.js 中进行引用插件
 
 ```javascript
 import { createApp } from 'vue'
@@ -399,7 +399,7 @@ createApp(App).use(store).use(router).use(Antd).mount('#app')
 - mapMutations - Mutations 的辅助函数
 - useState - 在setup中获取数据的辅助函数
 - useMutations - 在setup中更新state的辅助函数
-- useActions - 在setup中进行异步更新state的辅助函数  
+- useActions - 在setup中进行异步更新state的辅助函数
 - cleanMixin - 用户自动重置 vuex 数据的 mixin
 
 # 其他

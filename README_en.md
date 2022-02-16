@@ -156,8 +156,8 @@ export default {
 # 安装
 
 ```javascript
-  npm install @ctsj/vuexgenerator@next
-  yarn add @ctsj/vuexgenerator@next
+  npm install @ctsj/vuexgenerator
+  yarn add @ctsj/vuexgenerator
 ```
 
 # 例子
