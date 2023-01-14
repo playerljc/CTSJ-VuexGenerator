@@ -169,7 +169,7 @@ function registerBusinessModules(): void {
       state: () => ({ ...defaultState, ...((module || {}).state || {}) }),
       mutations: {
         receive(state, payload) {
-          const keys = Object.keys(state);
+          const keys = Object.keys(payload);
           // eslint-disable-next-line @typescript-eslint/no-shadow
           for (let i = 0; i < keys.length; i++) {
             const key = keys[i];
