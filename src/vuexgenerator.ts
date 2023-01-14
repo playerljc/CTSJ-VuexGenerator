@@ -170,6 +170,16 @@ function registerBusinessModules(): void {
         // @ts-ignore
         ...((module || {})?.state || {}),
       }),
+      /**
+       * {
+       *    fetchList:{
+       *        value: {
+       *            total: 10,
+       *            records: []
+       *        }
+       *    }
+       * }
+       */
       mutations: {
         receive(state, { key, value }) {
           if (!key) return;
@@ -302,8 +312,10 @@ export const cleanMixin = (namespaces: string[]) => {
           }
         });
 
-        // @ts-ignore
-        this.$store.commit(`${namespace}/receive`, defaultState);
+        Object.keys(defaultState).forEach((key) => {
+          // @ts-ignore
+          this.$store.commit(`${namespace}/receive`, { key, value: defaultState[key] });
+        });
       });
     },
   };
