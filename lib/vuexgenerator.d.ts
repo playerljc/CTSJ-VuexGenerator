@@ -36,7 +36,7 @@ export declare const cleanMixin: (namespaces: string[]) => {
  * @param namespaces
  */
 export declare const useState: (namespaces: string[]) => {
-    loading: import("@vue/reactivity").ComputedRef<any>;
+    loading: import("vue").ComputedRef<any>;
 };
 /**
  * useMutations
@@ -50,7 +50,7 @@ export declare const useMutations: (namespaces: string[]) => {};
  * @param namespaces
  */
 export declare const useActions: (namespaces: string[]) => {};
-declare const _default: (serviceConfig: IServiceConfig, modules: IModules) => (store: any) => void;
+declare const _default: (serviceConfig: IServiceConfig, modules: IModules) => (store: Store) => void;
 /**
  * plugin
  * @param serviceConfig - service的配置
